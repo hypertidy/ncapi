@@ -163,7 +163,7 @@ This project is a progression from past attempts to make sense of this space.
 * https://github.com/hypertidy/rancid
 * https://github.com/hypertidy/ncdump
 * http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2016-December/009485.html
-
+* https://github.com/RConsortium/wishlist/issues/3
 
 # Code of conduct
 

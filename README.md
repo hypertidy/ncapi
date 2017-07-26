@@ -170,7 +170,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 17:34:21
+#> 1       NA <no groups found>     2d 2017-07-26 17:37:57
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
@@ -274,6 +274,7 @@ This project is a progression from past attempts to make sense of this space.
 -   <https://github.com/hypertidy/rancid>
 -   <https://github.com/hypertidy/ncdump>
 -   <http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2016-December/009485.html>
+-   <https://github.com/RConsortium/wishlist/issues/3>
 
 Code of conduct
 ===============
