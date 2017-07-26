@@ -29,10 +29,28 @@ Rnc_close <- function(ncid) {
     invisible(.Call(`_ncapi_Rnc_close`, ncid))
 }
 
+#' Inquire group IDs
+#'
+#' @inheritParams Rnc_close
+#' @export
+#' @examples
+#' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#'  con <- Rnc_open(f_l3b)
+#'  Rnc_inq_grps(con)
+#'  Rnc_close(con)
 Rnc_inq_grps <- function(ncid) {
     .Call(`_ncapi_Rnc_inq_grps`, ncid)
 }
 
+#' Inquire group name by ID
+#'
+#' @param grpid group ID provided by `Rnc_inq_grps`
+#' @export
+#' @examples
+#' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#'  con <- Rnc_open(f_l3b)
+#'  lapply(Rnc_inq_grps(con), Rnc_inq_grpname)
+#'  Rnc_close(con)
 Rnc_inq_grpname <- function(grpid) {
     .Call(`_ncapi_Rnc_inq_grpname`, grpid)
 }

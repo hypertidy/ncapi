@@ -37,7 +37,15 @@ void Rnc_close(int ncid) {
   int status = nc_close(ncid);
 }
 
-
+//' Inquire group IDs
+//'
+//' @inheritParams Rnc_close
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//'  con <- Rnc_open(f_l3b)
+//'  Rnc_inq_grps(con)
+//'  Rnc_close(con)
 // [[Rcpp::export]]
 IntegerVector Rnc_inq_grps(int ncid) {
   int numgrps;
@@ -51,6 +59,17 @@ IntegerVector Rnc_inq_grps(int ncid) {
   for (int i = 0; i < numgrps; i++) grpids[i] = ncids[i];
   return grpids;
 }
+
+
+//' Inquire group name by ID
+//'
+//' @param grpid group ID provided by `Rnc_inq_grps`
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//'  con <- Rnc_open(f_l3b)
+//'  lapply(Rnc_inq_grps(con), Rnc_inq_grpname)
+//'  Rnc_close(con)
 // [[Rcpp::export]]
 CharacterVector Rnc_inq_grpname(int grpid) {
   char name_in[1];
