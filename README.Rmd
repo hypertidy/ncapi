@@ -33,7 +33,7 @@ http://dirk.eddelbuettel.com/blog/2017/04/30/#006_easiest_package_registration
 
 # issues 2017-07-26
 
-Having issues perhaps related to https://github.com/RcppCore/Rcpp/issues/733
+Having issues perhaps related to RcppCore/Rcpp/issues/733
 
 This works, after I did a clean check out and install.  
 
