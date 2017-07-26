@@ -57,3 +57,21 @@ Rnc_inq_grpname <- function(grpid) {
     .Call(`_ncapi_Rnc_inq_grpname`, grpid)
 }
 
+#' Source inquiry
+#'
+#' once we have a given ID (group-less file, or specific group)
+#' find its contents
+#' @inheritParams Rnc_inq_grpname
+#' @export
+#' @examples
+#' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#'  con <- Rnc_open(f_l3b)
+#'  groupids <- Rnc_inq_grps(con)
+#'  l3b <- Rnc_inq(groupids[1])
+#'  Rnc_close(con)
+#'  print(f_l3b)
+#'  print(l3b)
+Rnc_inq <- function(grpid) {
+    .Call(`_ncapi_Rnc_inq`, grpid)
+}
+

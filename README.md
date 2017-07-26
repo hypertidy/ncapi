@@ -69,6 +69,53 @@ lapply(Rnc_inq_grps(con), Rnc_inq_grpname)
 Rnc_close(con)
 ```
 
+Get a large-ish summary of what is in the file (very WIP).
+
+``` r
+example(Rnc_inq)
+#> 
+#> Rnc_nq> f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#> 
+#> Rnc_nq>  con <- Rnc_open(f_l3b)
+#> 
+#> Rnc_nq>  groupids <- Rnc_inq_grps(con)
+#> 
+#> Rnc_nq>  l3b <- Rnc_inq(groupids[1])
+#> 
+#> Rnc_nq>  Rnc_close(con)
+#> 
+#> Rnc_nq>  print(f_l3b)
+#> [1] "/perm_storage/home/mdsumner/R/@R_PLATFORM@-library/@MAJ_MIN_VERSION@/ncapi/extdata/oceandata/S2008001.L3b_DAY_CHL.nc"
+#> 
+#> Rnc_nq>  print(l3b)
+#> $dims
+#> $dims$length
+#> [1]    2    2 2160
+#> 
+#> $dims$name
+#> [1] "binListDim"  "binDataDim"  "binIndexDim"
+#> 
+#> 
+#> $vars
+#> $vars$varnames
+#> [1] "BinList"  "chlor_a"  "chl_ocx"  "BinIndex"
+#> 
+#> $vars$natts
+#> [1] 0
+#> 
+#> $vars$dimIDs
+#> [1] 2
+#> 
+#> 
+#> $ngatts
+#> [1] 0
+#> 
+#> $unlimdimid
+#> [1] 0
+```
+
+Simple get group names.
+
 ``` r
 get_groups <- function(x, check_exists = TRUE) {
   if (check_exists) stopifnot(file.exists(x))
@@ -111,12 +158,55 @@ print(d)
 Thredds
 =======
 
+(These sources don't have groups so we need some more functionality to see anything happen).
+
 ``` r
-u <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
-get_groups(u, check_exists = FALSE)
+u1 <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
+get_groups(u1, check_exists = FALSE)
 #> returning 0 group names
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 16:24:03
+#> 1       NA <no groups found>     2d 2017-07-26 16:50:57
+
+
+u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
+get_groups(u2, check_exists = FALSE)
+#> returning 0 group names
+#> # A tibble: 1 x 4
+#>   group_id        group_name                                 source
+#>      <int>             <chr>                                  <chr>
+#> 1       NA <no groups found> A20160012016032.L3m_R32_SST_sst_9km.nc
+#> # ... with 1 more variables: access <dttm>
 ```
+
+Investigate them a little more deeply.
+
+``` r
+con <- Rnc_open(u1)
+Rnc_inq_grps(con)
+#> integer(0)
+
+## notice how the connection is the group ID in the degenerate case
+summ1 <- Rnc_inq(con)
+Rnc_close(con)
+
+
+con <- Rnc_open(u2)
+summ2 <- Rnc_inq(con)
+Rnc_close(con)
+```
+
+Archaeology
+===========
+
+This project is a progression from past attempts to make sense of this space.
+
+-   <https://github.com/mdsumner/anc>
+-   <https://github.com/hypertidy/rancid>
+-   <https://github.com/hypertidy/ncdump>
+
+Code of conduct
+===============
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

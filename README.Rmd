@@ -79,6 +79,13 @@ lapply(Rnc_inq_grps(con), Rnc_inq_grpname)
 Rnc_close(con)
 ```
 
+Get a large-ish summary of what is in the file (very WIP). 
+
+```{r}
+example(Rnc_inq)
+```
+
+Simple get group names. 
 
 ```{r func}
 get_groups <- function(x, check_exists = TRUE) {
@@ -102,7 +109,46 @@ print(d)
 
 # Thredds
 
+(These sources don't have groups so we need some more functionality to see anything happen).
+
+
 ```{r}
-u <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
-get_groups(u, check_exists = FALSE)
+u1 <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
+get_groups(u1, check_exists = FALSE)
+
+
+u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
+get_groups(u2, check_exists = FALSE)
 ```
+
+
+Investigate them a little more deeply. 
+
+```{r}
+con <- Rnc_open(u1)
+Rnc_inq_grps(con)
+
+## notice how the connection is the group ID in the degenerate case
+summ1 <- Rnc_inq(con)
+Rnc_close(con)
+
+
+con <- Rnc_open(u2)
+summ2 <- Rnc_inq(con)
+Rnc_close(con)
+```
+
+
+# Archaeology
+
+This project is a progression from past attempts to make sense of this space. 
+
+* https://github.com/mdsumner/anc
+* https://github.com/hypertidy/rancid
+* https://github.com/hypertidy/ncdump
+
+
+# Code of conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+

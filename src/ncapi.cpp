@@ -81,3 +81,71 @@ CharacterVector Rnc_inq_grpname(int grpid) {
   CharacterVector cnames = name_in;
   return cnames;
 }
+
+
+//' Source inquiry
+//'
+//' once we have a given ID (group-less file, or specific group)
+//' find its contents
+//' @inheritParams Rnc_inq_grpname
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//'  con <- Rnc_open(f_l3b)
+//'  groupids <- Rnc_inq_grps(con)
+//'  l3b <- Rnc_inq(groupids[1])
+//'  Rnc_close(con)
+//'  print(f_l3b)
+//'  print(l3b)
+// [[Rcpp::export]]
+List Rnc_inq(int grpid) {
+  int status;
+  int ndims, nvars, ngatts, unlimdimid;
+  status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
+
+  if (ndims < 1) return List::create();
+  size_t ilen;
+  char recname[NC_MAX_NAME+1];
+
+  // int nc_inq_dim     (int ncid, int dimid, char* name, size_t* lengthp);
+  IntegerVector dimlens(ndims);
+  CharacterVector dnames(ndims);
+  //printf("%i\n", ndims);
+  for (int idim = 0; idim < ndims; idim++) {
+    status = nc_inq_dim(grpid, idim, recname, &ilen);
+    dimlens[idim] = ilen;
+    dnames[idim] = recname;
+  }
+
+
+  //   int nc_inq_var(int ncid, int varid, char *name, nc_type *xtypep, int *ndimsp, int dimids[], int *nattsp);
+  // var dims somehow IntegerVector lens(nvars);
+  CharacterVector vnames(nvars);
+
+  //?? vtypes? CharacterVector vtypes(nvars);
+  int  var_dimids[NC_MAX_VAR_DIMS];
+
+  int var_natts;
+  int var_ndim;
+  nc_type var_type;
+  for (int ivar = 0; ivar < nvars; ivar++) {
+    status = nc_inq_var(grpid, ivar, recname, &var_type, &var_ndim, var_dimids, &var_natts);
+    vnames[ivar] = recname;
+
+    // printf("%s %i\n", recname, var_type);
+  }
+
+
+
+  IntegerVector R_dimids(var_ndim);
+  for (int ii = 0; ii < var_ndim; ii++) R_dimids[ii] = var_dimids[ii];
+  List out = List::create();
+  out["dims"] = List::create(Named("length") = dimlens, Named("name") = dnames);
+  out["vars"] = List::create(Named("varnames") = vnames,
+                         Named("natts") = var_natts,
+                         Named("dimIDs") = R_dimids);
+  out["ngatts"] = ngatts;
+  out["unlimdimid"] = unlimdimid;
+  return out;
+
+}
