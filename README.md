@@ -14,8 +14,10 @@ The first useable version of this package would replace the use of `RNetCDF` in 
 
 Later versions might be used by `RNetCDF` or `ncdf4`,
 
-Interested? Great!!
-===================
+Interested?
+===========
+
+Great!!
 
 I have no idea what I'm doing so any assistance, ideas, testing, encouragement is welcome.
 
@@ -24,6 +26,10 @@ In particular I need help with:
 -   basic C++, dealing with numbers and characters passed with the NetCDF API
 -   higher level design and C++ implementations to reduce the maintenance footprint
 -   specific workflows and sources to test
+-   cross-platform support, ensuring this builds on unix, MacOS, with rwinlib, and with standard downloads from Unidata for DIY semi-hackers
+
+I'm not kidding about basic C++, when I first wrote these early versions I struggled with
+casts between real C++ numbers and strings and their Rccp counterparts. When I figured out the right ways to do this I'll trash all these scrappy notes and leave pointers to the proper guides.
 
 Source of interest include:
 
@@ -39,19 +45,107 @@ Source of interest include:
 set up notes
 ============
 
--   General system requirements:
+-   General system requirements (WIP): <https://gist.github.com/mdsumner/3a19a0e4342b4067decfc049b4f4ecf5>
+-   package specific details are set in 'DESCRIPTION', 'ncapi-package.r', 'src/init.c', 'src/Makevars'
+-   Register routines, new in R 2017: <https://ironholds.org/registering-routines/>, <http://dirk.eddelbuettel.com/blog/2017/04/30/#006_easiest_package_registration>
+-   Configure Rcpp - (must import something, and useDynLib in roxygen comments)
 
-<https://github.com/mdsumner/nectar/blob/master/r-spatial.sh>
+When additions/changes made we must update registration with
 
--   package specific details See DESCRIPTION, ncapi-package.r, src/init.c, src/Makevars
+``` r
+## Presumably this could be makefiled (TODO). 
+tools::package_native_routine_registration_skeleton("../ncapi", "src/init.c",character_only = FALSE)
+```
 
--   Register routines, new in R 2017: <https://ironholds.org/registering-routines/>
+Examples
+========
 
-<http://dirk.eddelbuettel.com/blog/2017/04/30/#006_easiest_package_registration>
+``` r
+f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+f_hydro <- system.file("extdata", "unidata", "madis-hydro.nc", package = "ncapi")
+f_hgroups <- system.file("extdata", "unidata", "test_hgroups.nc", package = "ncapi")
+u1 <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
+u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
 
--   update registration with `tools::package_native_routine_registration_skeleton("../ncapi", "src/init.c",character_only = FALSE)`
-
--   Configure Rcpp 1) must import something <'@importFrom> Rcpp evalCpp' 2) useDynLib in roxygen
+library(tibble)
+library(ncapi)
+get_fun <- function(x) {
+  con <- Rnc_open(x)
+  on.exit(Rnc_close, add = TRUE)
+  l <- list(as_tibble(Rnc_inq_dimension(con)), 
+       as_tibble(Rnc_inq_variable(con)))
+  list(l, lapply(l[[2]]$id, function(a) Rnc_inq_vardims(con, a)))
+}
+get_fun(f_l3m)
+#> [[1]]
+#> [[1]][[1]]
+#> # A tibble: 4 x 4
+#>      id          name length unlim
+#>   <int>         <chr>  <int> <lgl>
+#> 1     0           lat   2160 FALSE
+#> 2     1           lon   4320 FALSE
+#> 3     2           rgb      3 FALSE
+#> 4     3 eightbitcolor    256 FALSE
+#> 
+#> [[1]][[2]]
+#> # A tibble: 4 x 5
+#>      id    name  type ndims natts
+#>   <int>   <chr> <chr> <chr> <chr>
+#> 1     0 chlor_a     5     2    12
+#> 2     1     lat     5     1     5
+#> 3     2     lon     5     1     5
+#> 4     3 palette     7     2     0
+#> 
+#> 
+#> [[2]]
+#> [[2]][[1]]
+#> [1] 0 1
+#> 
+#> [[2]][[2]]
+#> [1] 0
+#> 
+#> [[2]][[3]]
+#> [1] 1
+#> 
+#> [[2]][[4]]
+#> [1] 2 3
+get_fun(f_l3b)
+#> [[1]]
+#> [[1]][[1]]
+#> # A tibble: 0 x 4
+#> # ... with 4 variables: id <int>, name <chr>, length <int>, unlim <lgl>
+#> 
+#> [[1]][[2]]
+#> # A tibble: 0 x 5
+#> # ... with 5 variables: id <int>, name <chr>, type <chr>, ndims <chr>,
+#> #   natts <chr>
+#> 
+#> 
+#> [[2]]
+#> list()
+##get_fun(f_hydro)  ## doesn't work
+get_fun(f_hgroups)
+#> [[1]]
+#> [[1]][[1]]
+#> # A tibble: 1 x 4
+#>      id   name length unlim
+#>   <int>  <chr>  <int> <lgl>
+#> 1     0 recNum     74 FALSE
+#> 
+#> [[1]][[2]]
+#> # A tibble: 1 x 5
+#>      id     name  type ndims natts
+#>   <int>    <chr> <chr> <chr> <chr>
+#> 1     0 UTC_time    12     1     2
+#> 
+#> 
+#> [[2]]
+#> [[2]][[1]]
+#> [1] 0
+#get_fun(u1)  ## doesn't work
+#get_fun(u2)  ## doesn't work
+```
 
 raw examples
 ============
@@ -115,6 +209,9 @@ example(Rnc_inq)
 #> 
 #> $unlimdimid
 #> [1] 0
+#> 
+#> 
+#> Rnc_nq>  f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
 ```
 
 Simple get group names.
@@ -144,17 +241,17 @@ print(d)
 #> # A tibble: 11 x 5
 #>    source group_id                             group_name
 #>     <chr>    <int>                                  <chr>
-#>  1      1    65537                    level-3_binned_data
-#>  2      1    65538                     processing_control
-#>  3      2    65537                     processing_control
+#>  1      1   262145                    level-3_binned_data
+#>  2      1   262146                     processing_control
+#>  3      2   262145                     processing_control
 #>  4      3       NA                      <no groups found>
-#>  5      4    65537  mozaic_flight_2012030403540535_ascent
-#>  6      4    65538 mozaic_flight_2012030321335035_descent
-#>  7      4    65539 mozaic_flight_2012030403540535_descent
-#>  8      4    65540  mozaic_flight_2012030412545335_ascent
-#>  9      4    65541  mozaic_flight_2012030419144751_ascent
-#> 10      4    65542 mozaic_flight_2012030319051051_descent
-#> 11      4    65543  mozaic_flight_2012030421382353_ascent
+#>  5      4   262145  mozaic_flight_2012030403540535_ascent
+#>  6      4   262146 mozaic_flight_2012030321335035_descent
+#>  7      4   262147 mozaic_flight_2012030403540535_descent
+#>  8      4   262148  mozaic_flight_2012030412545335_ascent
+#>  9      4   262149  mozaic_flight_2012030419144751_ascent
+#> 10      4   262150 mozaic_flight_2012030319051051_descent
+#> 11      4   262151  mozaic_flight_2012030421382353_ascent
 #> # ... with 2 more variables: source <chr>, access <dttm>
 ```
 
@@ -170,7 +267,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 17:37:57
+#> 1       NA <no groups found>     2d 2017-07-27 01:04:35
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"

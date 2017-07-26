@@ -75,6 +75,34 @@ tools::package_native_routine_registration_skeleton("../ncapi", "src/init.c",cha
 ```
 
 
+# Examples
+
+```{r}
+f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+f_hydro <- system.file("extdata", "unidata", "madis-hydro.nc", package = "ncapi")
+f_hgroups <- system.file("extdata", "unidata", "test_hgroups.nc", package = "ncapi")
+u1 <- "http://tds.hycom.org/thredds/dodsC/GLBa0.08/latest/2d"
+u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
+
+library(tibble)
+library(ncapi)
+get_fun <- function(x) {
+  con <- Rnc_open(x)
+  on.exit(Rnc_close, add = TRUE)
+  l <- list(as_tibble(Rnc_inq_dimension(con)), 
+       as_tibble(Rnc_inq_variable(con)))
+  list(l, lapply(l[[2]]$id, function(a) Rnc_inq_vardims(con, a)))
+}
+get_fun(f_l3m)
+get_fun(f_l3b)
+##get_fun(f_hydro)  ## doesn't work
+get_fun(f_hgroups)
+#get_fun(u1)  ## doesn't work
+#get_fun(u2)  ## doesn't work
+
+```
+
 # raw examples
 
 ```{r L3bin}

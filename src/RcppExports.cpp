@@ -48,17 +48,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// Rnc_inq_dims
-int Rnc_inq_dims(int grpid);
-RcppExport SEXP _ncapi_Rnc_inq_dims(SEXP grpidSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
-    rcpp_result_gen = Rcpp::wrap(Rnc_inq_dims(grpid));
-    return rcpp_result_gen;
-END_RCPP
-}
 // Rnc_inq_dimension
 List Rnc_inq_dimension(int grpid);
 RcppExport SEXP _ncapi_Rnc_inq_dimension(SEXP grpidSEXP) {
@@ -81,6 +70,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Rnc_inq_vardims
+IntegerVector Rnc_inq_vardims(int grpid, int ivar);
+RcppExport SEXP _ncapi_Rnc_inq_vardims(SEXP grpidSEXP, SEXP ivarSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    Rcpp::traits::input_parameter< int >::type ivar(ivarSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_vardims(grpid, ivar));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Rnc_inq
 List Rnc_inq(int grpid);
 RcppExport SEXP _ncapi_Rnc_inq(SEXP grpidSEXP) {
@@ -89,6 +90,17 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
     rcpp_result_gen = Rcpp::wrap(Rnc_inq(grpid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Rnc_inq_dims
+int Rnc_inq_dims(int grpid);
+RcppExport SEXP _ncapi_Rnc_inq_dims(SEXP grpidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_dims(grpid));
     return rcpp_result_gen;
 END_RCPP
 }

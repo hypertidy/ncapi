@@ -89,33 +89,6 @@ CharacterVector Rnc_inq_grpname(int grpid) {
 // int nc_inq_unlimdim (int ncid, int *unlimdimidp);
 // int nc_inq_format   (int ncid, int *formatp);
 
-//' Dimension inquiry
-//'
-//' @inheritParams Rnc_inq_grpname
-//' @export
-//' @examples
-//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
-//' con <- Rnc_open(f_l3b)
-//' groupids <- Rnc_inq_grps(con)
-//' Rnc_inq_dims(groupids[1])
-//' Rnc_close(con)
-//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
-//' # ncmeta::nc_dims(f_l3m)
-//' # A tibble: 4 x 4
-//'       id          name length unlim
-//'  <int>         <chr>  <dbl> <lgl>
-//'  1     0           lat   2160 FALSE
-//'  2     1           lon   4320 FALSE
-//'  3     2           rgb      3 FALSE
-//'  4     3 eightbitcolor    256 FALSE
-// [[Rcpp::export]]
-int Rnc_inq_dims(int grpid) {
-  int status;
-  int ndims;
-  status = nc_inq_ndims(grpid, &ndims);
-
-  return(ndims);
-  }
 
 //' Dimension inquiry
 //'
@@ -193,10 +166,17 @@ List Rnc_inq_variable(int grpid) {
   int var_ndim;
   nc_type var_type;
   IntegerVector varids(ndims);
-  CharacterVector varnames(ndims);
-  CharacterVector vartypes(ndims);
-  CharacterVector varndims(ndims);
-  CharacterVector varnatts(ndims);
+  CharacterVector varnames(nvars);
+  CharacterVector vartypes(nvars);
+  CharacterVector varndims(nvars);
+  CharacterVector varnatts(nvars);
+  // TODO: consider if this belongs in here or outside
+  //List vardimids(nvars);
+//  Rcpp::List tmp(n + 2);
+//  tmp[0] = Rcpp::IntegerVector(3);
+//  tmp[1] = Rcpp::IntegerVector(3);
+
+
   // https://www.unidata.ucar.edu/software/netcdf/netcdf-4/newdocs/netcdf-c/nc_005finq_005fvar.html
   // TODO: we need to map the nc_type, ncmeta used names "float" etc.
 
@@ -207,6 +187,8 @@ List Rnc_inq_variable(int grpid) {
     vartypes[ivar] = char(var_type);
     varndims[ivar] = var_ndim;
     varnatts[ivar] = var_natts;
+    // TODO: consider if this belongs in here or outside
+    //IntegerVector ivar_dims(var_ndim);
   }
   List out = List::create(Named("id") = varids,
                           Named("name") = varnames,
@@ -215,6 +197,41 @@ List Rnc_inq_variable(int grpid) {
                           Named("natts") = varnatts);
   return(out);
 }
+
+
+//' Dimensions of variables
+//'
+//' @inheritParams Rnc_inq_grpname
+//' @param ivar index of variable
+//' @export
+//' @examples
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3m)
+//' variables <- tibble::as_tibble(Rnc_inq_variable(con))
+//'  setNames(lapply(variables$id, function(x) Rnc_inq_vardims(con, x)), variables$name)
+//' Rnc_close(con)
+// [[Rcpp::export]]
+IntegerVector Rnc_inq_vardims(int grpid, int ivar) {
+  int status;
+  int  var_dimids[NC_MAX_VAR_DIMS];
+  char recname[NC_MAX_NAME+1];
+  nc_type var_type;
+  int var_ndim;
+  int var_natts;
+  // https://www.unidata.ucar.edu/software/netcdf/netcdf-4/newdocs/netcdf-c/nc_005finq_005fvar.html
+ status = nc_inq_var(grpid, ivar, recname, &var_type, &var_ndim, var_dimids, &var_natts);
+ IntegerVector vardims(var_ndim);
+ for (int idim = 0; idim < var_ndim; idim++) {
+   vardims[idim] = var_dimids[idim];
+ }
+ return(vardims);
+}
+
+
+// TODO cleanup
+/// Stuff down here is probably not used ----------------------------------------------
+
+
 
 //' Source inquiry
 //'
@@ -239,7 +256,7 @@ List Rnc_inq(int grpid) {
   // A: it's the dimension id, or -1
   status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
 
-//TODO: no dimensions is possibly an ok state
+  //TODO: no dimensions is possibly an ok state
   if (ndims < 1) return List::create();
   size_t ilen;
   char recname[NC_MAX_NAME+1];
@@ -285,4 +302,32 @@ List Rnc_inq(int grpid) {
   out["unlimdimid"] = unlimdimid;
   return out;
 
+}
+
+//' Dimension inquiry
+//'
+//' @inheritParams Rnc_inq_grpname
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3b)
+//' groupids <- Rnc_inq_grps(con)
+//' Rnc_inq_dims(groupids[1])
+//' Rnc_close(con)
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//' # ncmeta::nc_dims(f_l3m)
+//' # A tibble: 4 x 4
+//'       id          name length unlim
+//'  <int>         <chr>  <dbl> <lgl>
+//'  1     0           lat   2160 FALSE
+//'  2     1           lon   4320 FALSE
+//'  3     2           rgb      3 FALSE
+//'  4     3 eightbitcolor    256 FALSE
+// [[Rcpp::export]]
+int Rnc_inq_dims(int grpid) {
+  int status;
+  int ndims;
+  status = nc_inq_ndims(grpid, &ndims);
+
+  return(ndims);
 }
