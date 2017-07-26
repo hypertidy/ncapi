@@ -9,9 +9,11 @@
 
 /* .Call calls */
 extern SEXP _ncapi_Rnc_open(SEXP);
+extern SEXP _ncapi_Rnc_close(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"_ncapi_Rnc_open", (DL_FUNC) &_ncapi_Rnc_open, 1},
+  {"_ncapi_Rnc_close", (DL_FUNC) &_ncapi_Rnc_close, 1},
   {NULL, NULL, 0}
 };
 
