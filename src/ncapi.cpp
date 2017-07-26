@@ -68,11 +68,14 @@ IntegerVector Rnc_inq_grps(int ncid) {
 //' @examples
 //' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
 //'  con <- Rnc_open(f_l3b)
+//'  groupids <- Rnc_inq_grps(con)
+//'  Rnc_inq_grpname(groupids[1])
 //'  lapply(Rnc_inq_grps(con), Rnc_inq_grpname)
 //'  Rnc_close(con)
 // [[Rcpp::export]]
 CharacterVector Rnc_inq_grpname(int grpid) {
-  char name_in[1];
+//char name_in[1];
+  char name_in[NC_MAX_NAME + 1];
   int status;
   status = nc_inq_grpname(grpid, name_in);
   CharacterVector cnames = name_in;
