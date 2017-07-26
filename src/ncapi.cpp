@@ -132,8 +132,9 @@ int Rnc_inq_dims(int grpid) {
 //' ## watch out because if only one, the file con is the one
 //' ##groupids <- Rnc_inq_grps(con)
 //' tibble::as_tibble(Rnc_inq_dimension(con))
+//' Rnc_close(con)
 //' ## that should be the same as
-//' ncmeta::nc_dims(f_l3m)
+//' #ncmeta::nc_dims(f_l3m)
 // [[Rcpp::export]]
 List Rnc_inq_dimension(int grpid) {
   int status;
@@ -146,7 +147,6 @@ List Rnc_inq_dimension(int grpid) {
   IntegerVector dimids(ndims);
   LogicalVector unlim(ndims);
   CharacterVector dimnames(ndims);
-  //printf("%i\n", ndims);
   char recname[NC_MAX_NAME+1];
   size_t ilen;
   for (int idim = 0; idim < ndims; idim++) {
@@ -162,6 +162,60 @@ List Rnc_inq_dimension(int grpid) {
                           Named("unlim") = unlim);
   return(out);
 }
+
+//' Variable inquiry
+//'
+//' @inheritParams Rnc_inq_grpname
+//' @export
+//' @examples
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3m)
+//' tibble::as_tibble(Rnc_inq_variable(con))
+//' Rnc_close(con)
+//' ## that should be the same as
+//' # ncmeta::nc_vars(f_l3m)
+//' # # A tibble: 4 x 5
+//' #   id    name  type ndims natts
+//' #   <int>   <chr> <chr> <int> <int>
+//' #   0     chlor_a float     2    12
+//' #   1     lat float     1     5
+//' #   2     lon float     1     5
+//' #   3     palette ubyte     2     0
+// [[Rcpp::export]]
+List Rnc_inq_variable(int grpid) {
+  int status;
+  int ndims, nvars, ngatts, unlimdimid;
+  status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
+  CharacterVector vnames(nvars);
+  int  var_dimids[NC_MAX_VAR_DIMS];
+  char recname[NC_MAX_NAME+1];
+  int var_natts;
+  int var_ndim;
+  nc_type var_type;
+  IntegerVector varids(ndims);
+  CharacterVector varnames(ndims);
+  CharacterVector vartypes(ndims);
+  CharacterVector varndims(ndims);
+  CharacterVector varnatts(ndims);
+  // https://www.unidata.ucar.edu/software/netcdf/netcdf-4/newdocs/netcdf-c/nc_005finq_005fvar.html
+  // TODO: we need to map the nc_type, ncmeta used names "float" etc.
+
+  for (int ivar = 0; ivar < nvars; ivar++) {
+    status = nc_inq_var(grpid, ivar, recname, &var_type, &var_ndim, var_dimids, &var_natts);
+    varids[ivar] = ivar;
+    varnames[ivar] = recname;
+    vartypes[ivar] = char(var_type);
+    varndims[ivar] = var_ndim;
+    varnatts[ivar] = var_natts;
+  }
+  List out = List::create(Named("id") = varids,
+                          Named("name") = varnames,
+                          Named("type") = vartypes,
+                          Named("ndims") = varndims,
+                          Named("natts") = varnatts);
+  return(out);
+}
+
 //' Source inquiry
 //'
 //' once we have a given ID (group-less file, or specific group)

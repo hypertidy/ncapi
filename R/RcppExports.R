@@ -91,9 +91,37 @@ Rnc_inq_dims <- function(grpid) {
 #' Rnc_inq_dimension(groupids[1])
 #' Rnc_close(con)
 #' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
-#'
+#' con <- Rnc_open(f_l3m)
+#' ## watch out because if only one, the file con is the one
+#' ##groupids <- Rnc_inq_grps(con)
+#' tibble::as_tibble(Rnc_inq_dimension(con))
+#' Rnc_close(con)
+#' ## that should be the same as
+#' #ncmeta::nc_dims(f_l3m)
 Rnc_inq_dimension <- function(grpid) {
     .Call(`_ncapi_Rnc_inq_dimension`, grpid)
+}
+
+#' Variable inquiry
+#'
+#' @inheritParams Rnc_inq_grpname
+#' @export
+#' @examples
+#' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+#' con <- Rnc_open(f_l3m)
+#' tibble::as_tibble(Rnc_inq_variable(con))
+#' Rnc_close(con)
+#' ## that should be the same as
+#' # ncmeta::nc_vars(f_l3m)
+#' # # A tibble: 4 x 5
+#' #   id    name  type ndims natts
+#' #   <int>   <chr> <chr> <int> <int>
+#' #   0     chlor_a float     2    12
+#' #   1     lat float     1     5
+#' #   2     lon float     1     5
+#' #   3     palette ubyte     2     0
+Rnc_inq_variable <- function(grpid) {
+    .Call(`_ncapi_Rnc_inq_variable`, grpid)
 }
 
 #' Source inquiry

@@ -19,5 +19,11 @@ groupids <- Rnc_inq_grps(con)
 Rnc_inq_dimension(groupids[1])
 Rnc_close(con)
 f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
-
+con <- Rnc_open(f_l3m)
+## watch out because if only one, the file con is the one
+##groupids <- Rnc_inq_grps(con)
+tibble::as_tibble(Rnc_inq_dimension(con))
+Rnc_close(con)
+## that should be the same as
+#ncmeta::nc_dims(f_l3m)
 }

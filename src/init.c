@@ -14,6 +14,7 @@ extern SEXP _ncapi_Rnc_inq_dimension(SEXP);
 extern SEXP _ncapi_Rnc_inq_dims(SEXP);
 extern SEXP _ncapi_Rnc_inq_grpname(SEXP);
 extern SEXP _ncapi_Rnc_inq_grps(SEXP);
+extern SEXP _ncapi_Rnc_inq_variable(SEXP);
 extern SEXP _ncapi_Rnc_open(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
@@ -23,6 +24,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ncapi_Rnc_inq_dims",      (DL_FUNC) &_ncapi_Rnc_inq_dims,      1},
     {"_ncapi_Rnc_inq_grpname",   (DL_FUNC) &_ncapi_Rnc_inq_grpname,   1},
     {"_ncapi_Rnc_inq_grps",      (DL_FUNC) &_ncapi_Rnc_inq_grps,      1},
+    {"_ncapi_Rnc_inq_variable",  (DL_FUNC) &_ncapi_Rnc_inq_variable,  1},
     {"_ncapi_Rnc_open",          (DL_FUNC) &_ncapi_Rnc_open,          1},
     {NULL, NULL, 0}
 };

@@ -70,6 +70,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Rnc_inq_variable
+List Rnc_inq_variable(int grpid);
+RcppExport SEXP _ncapi_Rnc_inq_variable(SEXP grpidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_variable(grpid));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Rnc_inq
 List Rnc_inq(int grpid);
 RcppExport SEXP _ncapi_Rnc_inq(SEXP grpidSEXP) {
