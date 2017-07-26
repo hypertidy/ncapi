@@ -11,8 +11,10 @@
 #'  Rnc_open(f_l3b)
 #' f_l3m <- system.file("inst", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
 #'  Rnc_open(f_l3m)
-#' u_cst <- "http://coastwatch.pfeg.noaa.gov/erddap/griddap/erdQSwind3da"
-#'  Rnc_open(u_cst)
+#' u_wind <- "http://coastwatch.pfeg.noaa.gov/erddap/griddap/erdQSwind3day"
+#'  Rnc_open(u_wind)
+#' u_oc <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
+#' Rnc_open(u_oc)
 Rnc_open <- function(dsn) {
     .Call(`_ncapi_Rnc_open`, dsn)
 }
