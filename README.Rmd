@@ -139,6 +139,19 @@ Rnc_close(con)
 ```
 
 
+Content summary of hycom **GLBa0.08**. 
+
+```{r}
+print(summ1)
+```
+
+Content summary of **A20160012016032.L3m_R32_SST_sst_9km**.
+
+```{r}
+print(summ2)
+```
+
+
 # Archaeology
 
 This project is a progression from past attempts to make sense of this space. 

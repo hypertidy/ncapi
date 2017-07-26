@@ -19,6 +19,6 @@ f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package 
  groupids <- Rnc_inq_grps(con)
  l3b <- Rnc_inq(groupids[1])
  Rnc_close(con)
- print(f_l3b)
+ print(basename(f_l3b))
  print(l3b)
 }

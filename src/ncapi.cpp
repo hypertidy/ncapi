@@ -95,7 +95,7 @@ CharacterVector Rnc_inq_grpname(int grpid) {
 //'  groupids <- Rnc_inq_grps(con)
 //'  l3b <- Rnc_inq(groupids[1])
 //'  Rnc_close(con)
-//'  print(f_l3b)
+//'  print(basename(f_l3b))
 //'  print(l3b)
 // [[Rcpp::export]]
 List Rnc_inq(int grpid) {

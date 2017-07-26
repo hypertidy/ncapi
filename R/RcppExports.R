@@ -69,7 +69,7 @@ Rnc_inq_grpname <- function(grpid) {
 #'  groupids <- Rnc_inq_grps(con)
 #'  l3b <- Rnc_inq(groupids[1])
 #'  Rnc_close(con)
-#'  print(f_l3b)
+#'  print(basename(f_l3b))
 #'  print(l3b)
 Rnc_inq <- function(grpid) {
     .Call(`_ncapi_Rnc_inq`, grpid)

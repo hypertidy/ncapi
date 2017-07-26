@@ -84,8 +84,8 @@ example(Rnc_inq)
 #> 
 #> Rnc_nq>  Rnc_close(con)
 #> 
-#> Rnc_nq>  print(f_l3b)
-#> [1] "/perm_storage/home/mdsumner/R/@R_PLATFORM@-library/@MAJ_MIN_VERSION@/ncapi/extdata/oceandata/S2008001.L3b_DAY_CHL.nc"
+#> Rnc_nq>  print(basename(f_l3b))
+#> [1] "S2008001.L3b_DAY_CHL.nc"
 #> 
 #> Rnc_nq>  print(l3b)
 #> $dims
@@ -167,7 +167,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 16:50:57
+#> 1       NA <no groups found>     2d 2017-07-26 16:56:11
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
@@ -195,6 +195,71 @@ Rnc_close(con)
 con <- Rnc_open(u2)
 summ2 <- Rnc_inq(con)
 Rnc_close(con)
+```
+
+Content summary of hycom **GLBa0.08**.
+
+``` r
+print(summ1)
+#> $dims
+#> $dims$length
+#> [1]   10 4500 3298
+#> 
+#> $dims$name
+#> [1] "MT" "X"  "Y" 
+#> 
+#> 
+#> $vars
+#> $vars$varnames
+#>  [1] "Y"                         "X"                        
+#>  [3] "MT"                        "Date"                     
+#>  [5] "Latitude"                  "Longitude"                
+#>  [7] "qtot"                      "emp"                      
+#>  [9] "surface_temperature_trend" "surface_salinity_trend"   
+#> [11] "ssh"                      
+#> 
+#> $vars$natts
+#> [1] 5
+#> 
+#> $vars$dimIDs
+#> [1] 0 2 1
+#> 
+#> 
+#> $ngatts
+#> [1] 6
+#> 
+#> $unlimdimid
+#> [1] -1
+```
+
+Content summary of **A20160012016032.L3m\_R32\_SST\_sst\_9km**.
+
+``` r
+print(summ2)
+#> $dims
+#> $dims$length
+#> [1]  256 2160 4320    3
+#> 
+#> $dims$name
+#> [1] "eightbitcolor" "lat"           "lon"           "rgb"          
+#> 
+#> 
+#> $vars
+#> $vars$varnames
+#> [1] "lat"      "lon"      "palette"  "sst"      "qual_sst"
+#> 
+#> $vars$natts
+#> [1] 4
+#> 
+#> $vars$dimIDs
+#> [1] 1 2
+#> 
+#> 
+#> $ngatts
+#> [1] 65
+#> 
+#> $unlimdimid
+#> [1] -1
 ```
 
 Archaeology
