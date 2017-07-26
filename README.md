@@ -8,6 +8,8 @@ The need for this is discussed here:
 
 <http://rpubs.com/cyclemumner/293536>
 
+The crux is cross-platform support for NetCDF class, NetCDF-4 and HDF5-compatibles, Thredds servers, and sources with groups and compound types.
+
 The first useable version of this package would replace the use of `RNetCDF` in <https://github.com/hypertidy/ncmeta>. A key need is to have consistent cross-platform support for NetCDF-4 and -3, Thredds servers, compression options and MPI options.
 
 Later versions might be used by `RNetCDF` or `ncdf4`,
@@ -23,7 +25,7 @@ In particular I need help with:
 -   higher level design and C++ implementations to reduce the maintenance footprint
 -   specific workflows and sources to test
 
-Relevant sources and sources of interest include:
+Source of interest include:
 
 -   classic NetCDF 3 files
 -   NetCDF 4 files (the ones that can have *groups* and/or *compound-types*)
@@ -32,6 +34,7 @@ Relevant sources and sources of interest include:
 -   files with pathologies, e.g. character string coordinate values, unused dimensions, broken entities
 -   complex multi-dimensional models
 -   NetCDF sources that use compound types for examples different to L3BIN NASA ocean colour or KEA
+-   anything I haven't thought of that you know about ...
 
 set up notes
 ============
@@ -167,7 +170,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 17:19:08
+#> 1       NA <no groups found>     2d 2017-07-26 17:34:21
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"
@@ -270,6 +273,7 @@ This project is a progression from past attempts to make sense of this space.
 -   <https://github.com/mdsumner/anc>
 -   <https://github.com/hypertidy/rancid>
 -   <https://github.com/hypertidy/ncdump>
+-   <http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2016-December/009485.html>
 
 Code of conduct
 ===============

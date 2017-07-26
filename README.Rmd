@@ -19,9 +19,12 @@ knitr::opts_chunk$set(
 The goal of ncapi is to provide a foundation interface to the NetCDF API that transcends the three overlapping and patchily supported independent packages 
 `ncdf4`, `RNetCDF` and `rhdf5`. 
 
-The need for this is discussed here: 
+The need for this is discussed here:  
 
 http://rpubs.com/cyclemumner/293536
+
+The crux is cross-platform support for NetCDF class, NetCDF-4 and HDF5-compatibles, Thredds servers, and sources
+with groups and compound types. 
 
 The first useable version of this package would replace the use of `RNetCDF` in https://github.com/hypertidy/ncmeta. A key need is to have
 consistent cross-platform support for NetCDF-4 and -3, Thredds servers, compression options and MPI options. 
@@ -38,7 +41,7 @@ In particular I need help with:
 * higher level design and C++ implementations to reduce the maintenance footprint
 * specific workflows and sources to test
 
-Relevant sources and sources of interest include: 
+Source of interest include: 
 
 * classic NetCDF 3 files
 * NetCDF 4 files (the ones that can have *groups* and/or *compound-types*)
@@ -47,7 +50,7 @@ Relevant sources and sources of interest include:
 * files with pathologies, e.g. character string coordinate values, unused dimensions, broken entities
 * complex multi-dimensional models
 * NetCDF sources that use compound types for examples different to L3BIN NASA ocean colour or KEA
-
+* anything I haven't thought of that you know about ...
 
 
 # set up notes
@@ -159,6 +162,7 @@ This project is a progression from past attempts to make sense of this space.
 * https://github.com/mdsumner/anc
 * https://github.com/hypertidy/rancid
 * https://github.com/hypertidy/ncdump
+* http://lists.r-forge.r-project.org/pipermail/rcpp-devel/2016-December/009485.html
 
 
 # Code of conduct
