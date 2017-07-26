@@ -21,4 +21,5 @@ f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package 
  Rnc_close(con)
  print(basename(f_l3b))
  print(l3b)
+ f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
 }

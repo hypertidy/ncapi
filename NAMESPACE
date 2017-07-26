@@ -2,6 +2,8 @@
 
 export(Rnc_close)
 export(Rnc_inq)
+export(Rnc_inq_dimension)
+export(Rnc_inq_dims)
 export(Rnc_inq_grpname)
 export(Rnc_inq_grps)
 export(Rnc_open)

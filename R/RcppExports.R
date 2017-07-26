@@ -57,6 +57,45 @@ Rnc_inq_grpname <- function(grpid) {
     .Call(`_ncapi_Rnc_inq_grpname`, grpid)
 }
 
+#' Dimension inquiry
+#'
+#' @inheritParams Rnc_inq_grpname
+#' @export
+#' @examples
+#' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#' con <- Rnc_open(f_l3b)
+#' groupids <- Rnc_inq_grps(con)
+#' Rnc_inq_dims(groupids[1])
+#' Rnc_close(con)
+#' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+#' # ncmeta::nc_dims(f_l3m)
+#' # A tibble: 4 x 4
+#'       id          name length unlim
+#'  <int>         <chr>  <dbl> <lgl>
+#'  1     0           lat   2160 FALSE
+#'  2     1           lon   4320 FALSE
+#'  3     2           rgb      3 FALSE
+#'  4     3 eightbitcolor    256 FALSE
+Rnc_inq_dims <- function(grpid) {
+    .Call(`_ncapi_Rnc_inq_dims`, grpid)
+}
+
+#' Dimension inquiry
+#'
+#' @inheritParams Rnc_inq_grpname
+#' @export
+#' @examples
+#' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+#' con <- Rnc_open(f_l3b)
+#' groupids <- Rnc_inq_grps(con)
+#' Rnc_inq_dimension(groupids[1])
+#' Rnc_close(con)
+#' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+#'
+Rnc_inq_dimension <- function(grpid) {
+    .Call(`_ncapi_Rnc_inq_dimension`, grpid)
+}
+
 #' Source inquiry
 #'
 #' once we have a given ID (group-less file, or specific group)
@@ -71,6 +110,7 @@ Rnc_inq_grpname <- function(grpid) {
 #'  Rnc_close(con)
 #'  print(basename(f_l3b))
 #'  print(l3b)
+#'  f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
 Rnc_inq <- function(grpid) {
     .Call(`_ncapi_Rnc_inq`, grpid)
 }

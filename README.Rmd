@@ -31,7 +31,9 @@ consistent cross-platform support for NetCDF-4 and -3, Thredds servers, compress
 
 Later versions might be used by `RNetCDF` or `ncdf4`, 
 
-# Interested? Great!!
+# Interested? 
+
+Great!!
 
 I have no idea what I'm doing so any assistance, ideas, testing, encouragement is welcome.
 
@@ -40,6 +42,11 @@ In particular I need help with:
 * basic C++, dealing with numbers and characters passed with the NetCDF API
 * higher level design and C++ implementations to reduce the maintenance footprint
 * specific workflows and sources to test
+* cross-platform support, ensuring this builds on unix, MacOS, with rwinlib, and with standard downloads from Unidata for DIY semi-hackers
+
+I'm not kidding about basic C++, when I first wrote these early versions I struggled with  
+casts between real C++ numbers and strings and their Rccp counterparts. When I figured out the right
+ways to do this I'll trash all these scrappy notes and leave pointers to the proper guides. 
 
 Source of interest include: 
 
@@ -55,19 +62,17 @@ Source of interest include:
 
 # set up notes
 
-* General system requirements: 
+* General system requirements (WIP): https://gist.github.com/mdsumner/3a19a0e4342b4067decfc049b4f4ecf5
+* package specific details are set in 'DESCRIPTION', 'ncapi-package.r', 'src/init.c', 'src/Makevars'
+* Register routines, new in R 2017:  https://ironholds.org/registering-routines/, http://dirk.eddelbuettel.com/blog/2017/04/30/#006_easiest_package_registration
+* Configure Rcpp - (must import something, and useDynLib in roxygen comments)
 
-https://github.com/mdsumner/nectar/blob/master/r-spatial.sh
+When additions/changes made we must update registration with 
 
-* package specific details See DESCRIPTION, ncapi-package.r, src/init.c, src/Makevars
-
-* Register routines, new in R 2017:  https://ironholds.org/registering-routines/
-
-http://dirk.eddelbuettel.com/blog/2017/04/30/#006_easiest_package_registration
-
-* update registration with `tools::package_native_routine_registration_skeleton("../ncapi", "src/init.c",character_only = FALSE)`
-
-* Configure Rcpp 1) must import something  '@importFrom Rcpp evalCpp' 2) useDynLib in roxygen
+```{r}
+## Presumably this could be makefiled (TODO). 
+tools::package_native_routine_registration_skeleton("../ncapi", "src/init.c",character_only = FALSE)
+```
 
 
 # raw examples

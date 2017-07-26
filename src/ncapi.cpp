@@ -82,7 +82,86 @@ CharacterVector Rnc_inq_grpname(int grpid) {
   return cnames;
 }
 
+// https://www.unidata.ucar.edu/software/netcdf/netcdf-4/newdocs/netcdf-c/nc_005finq-Family.html
+// int nc_inq_ndims    (int ncid, int *ndimsp);
+// int nc_inq_nvars    (int ncid, int *nvarsp);
+// int nc_inq_natts    (int ncid, int *ngattsp);
+// int nc_inq_unlimdim (int ncid, int *unlimdimidp);
+// int nc_inq_format   (int ncid, int *formatp);
 
+//' Dimension inquiry
+//'
+//' @inheritParams Rnc_inq_grpname
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3b)
+//' groupids <- Rnc_inq_grps(con)
+//' Rnc_inq_dims(groupids[1])
+//' Rnc_close(con)
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//' # ncmeta::nc_dims(f_l3m)
+//' # A tibble: 4 x 4
+//'       id          name length unlim
+//'  <int>         <chr>  <dbl> <lgl>
+//'  1     0           lat   2160 FALSE
+//'  2     1           lon   4320 FALSE
+//'  3     2           rgb      3 FALSE
+//'  4     3 eightbitcolor    256 FALSE
+// [[Rcpp::export]]
+int Rnc_inq_dims(int grpid) {
+  int status;
+  int ndims;
+  status = nc_inq_ndims(grpid, &ndims);
+
+  return(ndims);
+  }
+
+//' Dimension inquiry
+//'
+//' @inheritParams Rnc_inq_grpname
+//' @export
+//' @examples
+//' f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3b)
+//' groupids <- Rnc_inq_grps(con)
+//' Rnc_inq_dimension(groupids[1])
+//' Rnc_close(con)
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//' con <- Rnc_open(f_l3m)
+//' ## watch out because if only one, the file con is the one
+//' ##groupids <- Rnc_inq_grps(con)
+//' tibble::as_tibble(Rnc_inq_dimension(con))
+//' ## that should be the same as
+//' ncmeta::nc_dims(f_l3m)
+// [[Rcpp::export]]
+List Rnc_inq_dimension(int grpid) {
+  int status;
+  int ndims, nvars, ngatts, unlimdimid;
+  //status = nc_inq_ndims(grpid, &ndims);
+  status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
+
+  // int nc_inq_dim     (int ncid, int dimid, char* name, size_t* lengthp);
+  IntegerVector dimlens(ndims);
+  IntegerVector dimids(ndims);
+  LogicalVector unlim(ndims);
+  CharacterVector dimnames(ndims);
+  //printf("%i\n", ndims);
+  char recname[NC_MAX_NAME+1];
+  size_t ilen;
+  for (int idim = 0; idim < ndims; idim++) {
+    status = nc_inq_dim(grpid, idim, recname, &ilen);
+    dimlens[idim] = ilen;
+    dimnames[idim] = recname;
+    dimids[idim] = idim;
+    if (idim == unlimdimid) unlim[idim] = TRUE;
+  }
+  List out = List::create(Named("id") = dimids,
+                          Named("name") = dimnames,
+                          Named("length") = dimlens,
+                          Named("unlim") = unlim);
+  return(out);
+}
 //' Source inquiry
 //'
 //' once we have a given ID (group-less file, or specific group)
@@ -97,12 +176,16 @@ CharacterVector Rnc_inq_grpname(int grpid) {
 //'  Rnc_close(con)
 //'  print(basename(f_l3b))
 //'  print(l3b)
+//'  f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
 // [[Rcpp::export]]
 List Rnc_inq(int grpid) {
   int status;
   int ndims, nvars, ngatts, unlimdimid;
+  // Q: how do we know a dimension is unlimited from here?
+  // A: it's the dimension id, or -1
   status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
 
+//TODO: no dimensions is possibly an ok state
   if (ndims < 1) return List::create();
   size_t ilen;
   char recname[NC_MAX_NAME+1];
