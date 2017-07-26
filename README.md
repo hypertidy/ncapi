@@ -21,7 +21,7 @@ In particular I need help with:
 
 -   basic C++, dealing with numbers and characters passed with the NetCDF API
 -   higher level design and C++ implementations to reduce the maintenance footprint
--   interested uses able to test different sources
+-   specific workflows and sources to test
 
 Relevant sources and sources of interest include:
 
@@ -167,7 +167,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-26 16:56:11
+#> 1       NA <no groups found>     2d 2017-07-26 17:19:08
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"

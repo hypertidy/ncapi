@@ -36,7 +36,7 @@ In particular I need help with:
 
 * basic C++, dealing with numbers and characters passed with the NetCDF API
 * higher level design and C++ implementations to reduce the maintenance footprint
-* interested uses able to test different sources
+* specific workflows and sources to test
 
 Relevant sources and sources of interest include: 
 
