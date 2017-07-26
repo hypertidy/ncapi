@@ -1,3 +1,11 @@
+/src/*.o
+/src/*.o-*
+/src/*.d
+/src/*.so
+*.dll
+.RData
 .Rproj.user
 .Rhistory
-.RData
+inst/doc
+.httr-oauth
+vignettes/*.R

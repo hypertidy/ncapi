@@ -13,9 +13,9 @@ Rnc_open(dsn)
 Pass  a character data source name to the internal nc_open library function.
 }
 \examples{
-f_l3b <- system.file("inst", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
+f_l3b <- system.file("extdata", "oceandata", "S2008001.L3b_DAY_CHL.nc", package = "ncapi")
  Rnc_open(f_l3b)
-f_l3m <- system.file("inst", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
  Rnc_open(f_l3m)
 u_cst <- "http://coastwatch.pfeg.noaa.gov/erddap/griddap/erdQSwind3da"
  Rnc_open(u_cst)

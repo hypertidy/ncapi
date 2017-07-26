@@ -16,3 +16,35 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Rnc_close
+void Rnc_close(int ncid);
+RcppExport SEXP _ncapi_Rnc_close(SEXP ncidSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ncid(ncidSEXP);
+    Rnc_close(ncid);
+    return R_NilValue;
+END_RCPP
+}
+// Rnc_inq_grps
+IntegerVector Rnc_inq_grps(int ncid);
+RcppExport SEXP _ncapi_Rnc_inq_grps(SEXP ncidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type ncid(ncidSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_grps(ncid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Rnc_inq_grpname
+CharacterVector Rnc_inq_grpname(int grpid);
+RcppExport SEXP _ncapi_Rnc_inq_grpname(SEXP grpidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_grpname(grpid));
+    return rcpp_result_gen;
+END_RCPP
+}
