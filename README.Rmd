@@ -1,0 +1,30 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# set up notes
+
+https://github.com/mdsumner/nectar/blob/master/r-spatial.sh
+
+See DESCRIPTION, ncapi-package.r, src/init.c, src/Makevars
+
+Register routines: https://ironholds.org/registering-routines/
+
+Configure Rcpp: 
+
+- must import something  '@importFrom Rcpp evalCpp'
+- useDynLib in roxygen
+
+

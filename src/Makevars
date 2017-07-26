@@ -1,0 +1,10 @@
+
+NETCDF_CFLAGS = /usr/include -DgFortran
+NETCDF_LIBS   = -L/usr/lib -lnetcdf
+
+# RCPP_LDFLAGS = @RCPP_LDFLAGS@
+
+# combine with standard arguments for R
+PKG_CPPFLAGS = $(NETCDF_CFLAGS) -I../inst/include
+PKG_LIBS += $(NETCDF_LIBS)  $(RCPP_LDFLAGS)
+
