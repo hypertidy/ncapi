@@ -29,6 +29,15 @@ Rnc_close <- function(ncid) {
     invisible(.Call(`_ncapi_Rnc_close`, ncid))
 }
 
+#' n attributes
+#'
+#' @param grpid con
+#' @param varid variable id
+#' @export
+Rnc_inq_natts <- function(grpid, varid) {
+    .Call(`_ncapi_Rnc_inq_natts`, grpid, varid)
+}
+
 #' Inquire group IDs
 #'
 #' @inheritParams Rnc_close

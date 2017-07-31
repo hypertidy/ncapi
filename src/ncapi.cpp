@@ -37,6 +37,42 @@ void Rnc_close(int ncid) {
   int status = nc_close(ncid);
 }
 
+
+List Rnc_inq_att(int grpid, int varid)
+{
+  int natts;
+  nc_type vr_type, t_type;   /* attribute types */
+  size_t  vr_len, t_len;     /* attribute lengths */
+  nc_inq_varnatts(grpid, varid, &natts);
+  char attname[NC_MAX_NAME + 1];
+  char vname[NC_MAX_NAME + 1];
+
+
+
+  int status;
+  for (int iatt = 0; iatt < natts; iatt++) {
+    status = nc_inq_varname (grpid, varid, vname);
+    status = nc_inq_attname(grpid, varid, iatt, attname);
+    status = nc_inq_att(grpid, varid, attname, &vr_type, &vr_len);
+  }
+  List out = List::create();
+ return(out);
+}
+
+//' n attributes
+//'
+//' @param grpid con
+//' @param varid variable id
+//' @export
+// [[Rcpp::export]]
+IntegerVector Rnc_inq_natts(int grpid, int varid)
+{
+  int natts;
+  nc_inq_varnatts(grpid, varid, &natts);
+  IntegerVector out(1);
+  out[0] = natts;
+  return(out);
+}
 //' Inquire group IDs
 //'
 //' @inheritParams Rnc_close
@@ -165,7 +201,7 @@ List Rnc_inq_variable(int grpid) {
   int var_natts;
   int var_ndim;
   nc_type var_type;
-  IntegerVector varids(ndims);
+  IntegerVector varids(nvars);
   CharacterVector varnames(nvars);
   CharacterVector vartypes(nvars);
   CharacterVector varndims(nvars);
