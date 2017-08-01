@@ -26,6 +26,19 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// Rnc_inq_att
+List Rnc_inq_att(int grpid, int varid, int attid);
+RcppExport SEXP _ncapi_Rnc_inq_att(SEXP grpidSEXP, SEXP varidSEXP, SEXP attidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    Rcpp::traits::input_parameter< int >::type varid(varidSEXP);
+    Rcpp::traits::input_parameter< int >::type attid(attidSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_inq_att(grpid, varid, attid));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Rnc_inq_natts
 IntegerVector Rnc_inq_natts(int grpid, int varid);
 RcppExport SEXP _ncapi_Rnc_inq_natts(SEXP grpidSEXP, SEXP varidSEXP) {

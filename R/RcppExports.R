@@ -29,11 +29,25 @@ Rnc_close <- function(ncid) {
     invisible(.Call(`_ncapi_Rnc_close`, ncid))
 }
 
-#' n attributes
+#' Attribute details
+#'
+#' This is a structured list of the *names* of available attributes for
+#' the given variable. "Global" is variable -1. See Rnc_inq_variable for
+#' the variables and the number of attributes.
+#' To get the attribute values we need to map its type to the right
+#' function call of the API. This probably best done in R?
+#' @param grpid con
+#' @param varid variable id (can be global at -1)
+#' @param attid attribute id (within variable)
+Rnc_inq_att <- function(grpid, varid, attid) {
+    .Call(`_ncapi_Rnc_inq_att`, grpid, varid, attid)
+}
+
+#' We already know this from Rnc_inq_variable
 #'
 #' @param grpid con
 #' @param varid variable id
-#' @export
+#'
 Rnc_inq_natts <- function(grpid, varid) {
     .Call(`_ncapi_Rnc_inq_natts`, grpid, varid)
 }

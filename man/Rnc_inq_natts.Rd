@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{Rnc_inq_natts}
 \alias{Rnc_inq_natts}
-\title{n attributes}
+\title{We already know this from Rnc_inq_variable}
 \usage{
 Rnc_inq_natts(grpid, varid)
 }
@@ -12,5 +12,5 @@ Rnc_inq_natts(grpid, varid)
 \item{varid}{variable id}
 }
 \description{
-n attributes
+We already know this from Rnc_inq_variable
 }

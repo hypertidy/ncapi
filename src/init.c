@@ -10,6 +10,7 @@
 /* .Call calls */
 extern SEXP _ncapi_Rnc_close(SEXP);
 extern SEXP _ncapi_Rnc_inq(SEXP);
+extern SEXP _ncapi_Rnc_inq_att(SEXP, SEXP, SEXP);
 extern SEXP _ncapi_Rnc_inq_dimension(SEXP);
 extern SEXP _ncapi_Rnc_inq_dims(SEXP);
 extern SEXP _ncapi_Rnc_inq_grpname(SEXP);
@@ -22,6 +23,7 @@ extern SEXP _ncapi_Rnc_open(SEXP);
 static const R_CallMethodDef CallEntries[] = {
     {"_ncapi_Rnc_close",         (DL_FUNC) &_ncapi_Rnc_close,         1},
     {"_ncapi_Rnc_inq",           (DL_FUNC) &_ncapi_Rnc_inq,           1},
+    {"_ncapi_Rnc_inq_att",       (DL_FUNC) &_ncapi_Rnc_inq_att,       3},
     {"_ncapi_Rnc_inq_dimension", (DL_FUNC) &_ncapi_Rnc_inq_dimension, 1},
     {"_ncapi_Rnc_inq_dims",      (DL_FUNC) &_ncapi_Rnc_inq_dims,      1},
     {"_ncapi_Rnc_inq_grpname",   (DL_FUNC) &_ncapi_Rnc_inq_grpname,   1},

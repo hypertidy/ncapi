@@ -37,33 +37,43 @@ void Rnc_close(int ncid) {
   int status = nc_close(ncid);
 }
 
-
-List Rnc_inq_att(int grpid, int varid)
+//' Attribute details
+//'
+//' This is a structured list of the *names* of available attributes for
+//' the given variable. "Global" is variable -1. See Rnc_inq_variable for
+//' the variables and the number of attributes.
+//' To get the attribute values we need to map its type to the right
+//' function call of the API. This probably best done in R?
+//' @param grpid con
+//' @param varid variable id (can be global at -1)
+//' @param attid attribute id (within variable)
+//' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+//'  con <- Rnc_open(f_l3m)
+//'  vars <- tibble::as_tibble(Rnc_inq_variable(con))
+//'  lapply(seq_len(vars$natts[1])-1, function(iatt) Rnc_inq_att(con, vars$id[1], iatt))
+//'  Rnc_inq_att(con, vars$id[1], seq_len(vars$natts[1])[5])
+//'  Rnc_close(con)
+// [[Rcpp::export]]
+List Rnc_inq_att(int grpid, int varid, int attid)
 {
   int natts;
   nc_type vr_type, t_type;   /* attribute types */
   size_t  vr_len, t_len;     /* attribute lengths */
   nc_inq_varnatts(grpid, varid, &natts);
   char attname[NC_MAX_NAME + 1];
-  char vname[NC_MAX_NAME + 1];
-
-
-
   int status;
-  for (int iatt = 0; iatt < natts; iatt++) {
-    status = nc_inq_varname (grpid, varid, vname);
-    status = nc_inq_attname(grpid, varid, iatt, attname);
-    status = nc_inq_att(grpid, varid, attname, &vr_type, &vr_len);
-  }
-  List out = List::create();
+  status = nc_inq_attname(grpid, varid, attid, attname);
+  status = nc_inq_att(grpid, varid, attname, &vr_type, &vr_len);
+
+  List out = List::create(Named("attname") = attname);
  return(out);
 }
 
-//' n attributes
+//' We already know this from Rnc_inq_variable
 //'
 //' @param grpid con
 //' @param varid variable id
-//' @export
+//'
 // [[Rcpp::export]]
 IntegerVector Rnc_inq_natts(int grpid, int varid)
 {
