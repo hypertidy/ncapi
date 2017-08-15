@@ -39,6 +39,12 @@ Rnc_close <- function(ncid) {
 #' @param grpid con
 #' @param varid variable id (can be global at -1)
 #' @param attid attribute id (within variable)
+#' f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+#'  con <- Rnc_open(f_l3m)
+#'  vars <- tibble::as_tibble(Rnc_inq_variable(con))
+#'  lapply(seq_len(vars$natts[1])-1, function(iatt) Rnc_inq_att(con, vars$id[1], iatt))
+#'  Rnc_inq_att(con, vars$id[1], seq_len(vars$natts[1])[5])
+#'  Rnc_close(con)
 Rnc_inq_att <- function(grpid, varid, attid) {
     .Call(`_ncapi_Rnc_inq_att`, grpid, varid, attid)
 }

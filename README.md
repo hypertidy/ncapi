@@ -2,7 +2,7 @@
 ncapi
 =====
 
-The goal of ncapi is to provide a foundation interface to the NetCDF API that transcends the three overlapping and patchily supported independent packages `ncdf4`, `RNetCDF` and `rhdf5`.
+The goal of ncapi is to provide a foundation interface to the NetCDF API that transcends the three overlapping and patchily supported independent packages `ncdf4`, `RNetCDF`, `rhdf5`, and `rgdal`.
 
 The need for this is discussed here:
 
@@ -11,8 +11,6 @@ The need for this is discussed here:
 The crux is cross-platform support for NetCDF class, NetCDF-4 and HDF5-compatibles, Thredds servers, and sources with groups and compound types.
 
 The first useable version of this package would replace the use of `RNetCDF` in <https://github.com/hypertidy/ncmeta>. A key need is to have consistent cross-platform support for NetCDF-4 and -3, Thredds servers, compression options and MPI options.
-
-Later versions might be used by `RNetCDF` or `ncdf4`,
 
 Interested?
 ===========
@@ -28,8 +26,9 @@ In particular I need help with:
 -   specific workflows and sources to test
 -   cross-platform support, ensuring this builds on unix, MacOS, with rwinlib, and with standard downloads from Unidata for DIY semi-hackers
 
-I'm not kidding about basic C++, when I first wrote these early versions I struggled with
-casts between real C++ numbers and strings and their Rccp counterparts. When I figured out the right ways to do this I'll trash all these scrappy notes and leave pointers to the proper guides.
+ROpenSci show how to build RNetCDF via rwinlib, so NetCDF post 1.9.0 looks in good shape to hit CRAN and require being built against version 4. Ideally, we weould have CRAN prepared to do the same for rgdal, and even to include OpenDAP but it seems unlikely there's any communications channel for doing so. I have no idea if a successor to Win/Mac binary support is planned for CRAN, but it's a really obvious hole in the support for the general R community.
+
+I thought I had figured out using `nc_get_vara_type` and `nc_get_var_type` but I hit problems via OpenDAP when getting over ~1000x1000 floating point values, that RNetCDF has no problem with. I might just be building the count array incorrectly.
 
 Source of interest include:
 
@@ -267,7 +266,7 @@ get_groups(u1, check_exists = FALSE)
 #> # A tibble: 1 x 4
 #>   group_id        group_name source              access
 #>      <int>             <chr>  <chr>              <dttm>
-#> 1       NA <no groups found>     2d 2017-07-27 01:04:35
+#> 1       NA <no groups found>     2d 2017-08-15 21:42:14
 
 
 u2 <- "https://oceandata.sci.gsfc.nasa.gov:443/opendap/MODISA/L3SMI/2016/001/A20160012016032.L3m_R32_SST_sst_9km.nc"

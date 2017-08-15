@@ -9,10 +9,20 @@ Rnc_inq_att(grpid, varid, attid)
 \arguments{
 \item{grpid}{con}
 
-\item{varid}{variable id (can be global)}
+\item{varid}{variable id (can be global at -1)}
 
-\item{attid}{attribute id (within variable)}
+\item{attid}{attribute id (within variable)
+f_l3m <- system.file("extdata", "oceandata", "S2008001.L3m_DAY_CHL_chlor_a_9km.nc", package = "ncapi")
+ con <- Rnc_open(f_l3m)
+ vars <- tibble::as_tibble(Rnc_inq_variable(con))
+ lapply(seq_len(vars$natts[1])-1, function(iatt) Rnc_inq_att(con, vars$id[1], iatt))
+ Rnc_inq_att(con, vars$id[1], seq_len(vars$natts[1])[5])
+ Rnc_close(con)}
 }
 \description{
-Attribute details
+This is a structured list of the *names* of available attributes for
+the given variable. "Global" is variable -1. See Rnc_inq_variable for
+the variables and the number of attributes.
+To get the attribute values we need to map its type to the right
+function call of the API. This probably best done in R?
 }

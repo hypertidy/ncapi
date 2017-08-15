@@ -1,5 +1,8 @@
 #include <Rcpp.h>
 #include <netcdf.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 using namespace Rcpp;
 
@@ -205,6 +208,7 @@ List Rnc_inq_variable(int grpid) {
   int status;
   int ndims, nvars, ngatts, unlimdimid;
   status = nc_inq(grpid, &ndims, &nvars, &ngatts, &unlimdimid);
+
   CharacterVector vnames(nvars);
   int  var_dimids[NC_MAX_VAR_DIMS];
   char recname[NC_MAX_NAME+1];
@@ -377,3 +381,50 @@ int Rnc_inq_dims(int grpid) {
 
   return(ndims);
 }
+
+
+//
+// //' Get sst.
+// //'
+// //' @inheritParams Rnc_open
+// //' @export
+// // [[Rcpp::export]]
+// NumericVector get_sst(int grpid) {
+//   int ii = 1440;
+//   int jj = 720;
+//   short rh_val[ii * jj];
+//   int status;
+//   // lat, lon, palette, chlor_a
+//   status = nc_get_var_short(grpid, 4, rh_val);
+//   NumericVector a(ii*jj);
+//   for (int i = 0; i < (ii * jj); i++) {
+//    a[i] = rh_val[i];
+//     }
+//   return a;
+//
+// }
+//
+//
+// //' Get chlorophyll a 9km.
+// //'
+// //' @inheritParams Rnc_open
+// //' @export
+// // [[Rcpp::export]]
+// NumericVector get_chlor_a_9km(int grpid)
+// {
+//   int ii = 4320;
+//   int jj = 2160;
+// //  static size_t rh_index[] = {i, j};  /* where to get value from */
+//   float rh_val[ii * jj];                         /* where to put it */
+//   int status;
+// //  static size_t start[] = {0, 0}; /* start at first value */
+//
+//   // lat, lon, palette, chlor_a
+//   status = nc_get_var_float(grpid, 3, rh_val);
+//   NumericVector a(ii * jj);
+//  for (int i = 0; i < (ii * jj); i++) {
+//     a[i] = rh_val[i];
+//  }
+//   return a;
+// }
+
