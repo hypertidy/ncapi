@@ -3,8 +3,4 @@
 \docType{package}
 \name{ncapi}
 \alias{ncapi}
-\alias{ncapi-package}
 \title{ncapi.}
-\description{
-ncapi.
-}

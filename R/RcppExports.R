@@ -187,3 +187,7 @@ Rnc_inq_dims <- function(grpid) {
     .Call(`_ncapi_Rnc_inq_dims`, grpid)
 }
 
+Rnc_var_get1 <- function(grpid, varid, start) {
+    .Call(`_ncapi_Rnc_var_get1`, grpid, varid, start)
+}
+

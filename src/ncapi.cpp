@@ -377,9 +377,30 @@ List Rnc_inq(int grpid) {
 int Rnc_inq_dims(int grpid) {
   int status;
   int ndims;
+
   status = nc_inq_ndims(grpid, &ndims);
 
   return(ndims);
+}
+
+
+// [[Rcpp::export]]
+NumericVector Rnc_var_get1(int grpid, int varid, IntegerVector start) {
+  size_t *cstart=NULL;
+  int N = 4;
+  cstart = (size_t *) R_alloc (N, sizeof (size_t));
+  cstart[0] = start[0];
+  cstart[1] = start[1];
+  cstart[2] = start[2];
+  cstart[3] = start[3];
+
+  double rbuff = 27.68;
+  int err = nc_get_var1_double(grpid, varid, cstart,   &rbuff);
+  NumericVector out(1);
+  //avar = 2.3;
+  //Rprintf("%f\n", rbuff);
+  out[0] = rbuff;
+  return out;
 }
 
 

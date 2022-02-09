@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // Rnc_open
 int Rnc_open(CharacterVector dsn);
 RcppExport SEXP _ncapi_Rnc_open(SEXP dsnSEXP) {
@@ -126,6 +131,19 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
     rcpp_result_gen = Rcpp::wrap(Rnc_inq_dims(grpid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Rnc_var_get1
+NumericVector Rnc_var_get1(int grpid, int varid, IntegerVector start);
+RcppExport SEXP _ncapi_Rnc_var_get1(SEXP grpidSEXP, SEXP varidSEXP, SEXP startSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type grpid(grpidSEXP);
+    Rcpp::traits::input_parameter< int >::type varid(varidSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type start(startSEXP);
+    rcpp_result_gen = Rcpp::wrap(Rnc_var_get1(grpid, varid, start));
     return rcpp_result_gen;
 END_RCPP
 }

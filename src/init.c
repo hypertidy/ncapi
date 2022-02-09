@@ -19,6 +19,7 @@ extern SEXP _ncapi_Rnc_inq_natts(SEXP, SEXP);
 extern SEXP _ncapi_Rnc_inq_vardims(SEXP, SEXP);
 extern SEXP _ncapi_Rnc_inq_variable(SEXP);
 extern SEXP _ncapi_Rnc_open(SEXP);
+extern SEXP _ncapi_Rnc_var_get1(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ncapi_Rnc_close",         (DL_FUNC) &_ncapi_Rnc_close,         1},
@@ -32,6 +33,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_ncapi_Rnc_inq_vardims",   (DL_FUNC) &_ncapi_Rnc_inq_vardims,   2},
     {"_ncapi_Rnc_inq_variable",  (DL_FUNC) &_ncapi_Rnc_inq_variable,  1},
     {"_ncapi_Rnc_open",          (DL_FUNC) &_ncapi_Rnc_open,          1},
+    {"_ncapi_Rnc_var_get1",      (DL_FUNC) &_ncapi_Rnc_var_get1,      2},
     {NULL, NULL, 0}
 };
 
